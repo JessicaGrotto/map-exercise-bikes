@@ -44,4 +44,4 @@ setInterval(bikeStation, 10000);
 //Hacer funcion para centrar en la localizacion del usuario:
 //function btBuscarCerca(){}
 
-centerButton.addEventListener("click", btBuscarCerca)
+centerButton.addEventListener("click", btBuscarCerca())
