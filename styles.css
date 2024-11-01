@@ -10,3 +10,17 @@ body{
     width: 100%;
     height: 500px;
 }
+#center-button{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#center-button:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+}

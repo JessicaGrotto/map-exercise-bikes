@@ -6,43 +6,42 @@ const map = new maplibregl.Map({
     center: [-3.7038, 40.4168],
     zoom: 9.5,
     container: 'map',
-  });
+});
 
-//Conseguir as infos das bikes
+//Conseguir as infos de las bikes
 const bikeStation = async() => {
   try {
     const response = await fetch('https://api.citybik.es/v2/networks/bicimad');
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
-  }
-}
+    console.error(error)
+}}
 
-bikeStation()
+//cambiar el color del marcador según disponibilidad:  
+const tieneBicis = (free) => {
+  if (free > 10) {return "#28b463"} 
+  else if (free < 5) {return "#e74c3c"} 
+  else {return "#f7dc6f"}
+};
 
-//agregar marcadores donde hay rees de bikes
-const markers = [];
-  bikeStation().then(data2 => {
-  data2.network.stations.forEach(({name, latitude, longitude, free_bikes, slots}) => {
-    marker.push({name, latitude, longitude, free_bikes, empty_slots})
+bikeStation().then(data2 => {
+    data2.network.stations.forEach(({name, latitude, longitude, free_bikes, empty_slots}) => { 
+      //agregar marcadores donde hay rees de bikes
+        var marker = new maplibregl.Marker({color: tieneBicis(free_bikes)})//color de acuerdo con disponibilidad
+          .setLngLat([longitude, latitude])
+          .setPopup(new maplibregl.Popup().setHTML(
+            `<p>Station: ${name}</p>
+            <p>Free Bikes: ${free_bikes} || Empty Slots: ${empty_slots}</p>`
+          ))
+          .addTo(map);
   });
-
-  var marker = new maplibregl.Marker({color: tieneBicis(station.free_bikes)})//color de acuerdo con disponibilidad
-    .setLngLat([station.longitude, station.latitude])
-    .setPopup(new maplibregl.Popup().setHTML(`Station: ${station.name}`<br>`Free Bikes: ${station.free_bikes} Empty Slots: ${station.empty_slots}`))
-    .addTo(map);
-
-  //cambiar el color del marcador según disponibilidad:  
-  const tieneBicis = (free) => {
-        if (free > 10) {return "#28b463"} 
-        else if (free < 5) {return "#e74c3c"} 
-        else {return "#f7dc6f"}
-      };
 });
- 
+
+bikeStation();
+setInterval(bikeStation, 10000);
 
 //Hacer funcion para centrar en la localizacion del usuario:
 //function btBuscarCerca(){}
 
-//centerButton.addEventListener("click", btBuscarCerca)
+centerButton.addEventListener("click", btBuscarCerca)
